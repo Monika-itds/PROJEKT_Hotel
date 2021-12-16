@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informacje o pokoju</title>
+    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+
+    <!-- Main StyleSheet -->
+    <link rel="stylesheet" href="{% static 'hotel_app/css/detail.css' %}">
+
+</head>
+
+<body>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <!-- Room Image -->
+        <div class="image">
+            <img
+                src="https://i.pinimg.com/originals/3c/97/e2/3c97e2089fb9f6e7f9e0e04b9c0eeefc.jpg">
+        </div>
+
+        <!-- Room Details -->
+        <div class="room">
+
+            <!-- Div 1: Back to Home -->
+            <div class="home">
+                <a href="{% url 'hotel_app:RoomList' %}"><i class="fas fa-arrow-alt-circle-left">Powrót</i></a>
+            </div>
+
+            <!-- Div 2: Room Information -->
+            <div class="room-info">
+                <h1>{{room_category}}</h1>
+                <p>Przestronny pokój z wygodnymi łóżkami, telewizorem, nowoczesną łazienką oraz balkonem.
+                    W pokoju znajduje się również szafa, stolik z krzesłami, zestaw do przygotowania kawy i herbaty.
+                    Do dyspozycji naszych gości jest również ogólnodostępna w pełni wyposażona kuchnia.
+                    Wszyscy goście mogą bezpłatnie korzystać z dostępu do Internetu (wi-fi) oraz monitorowanego parkingu. </p>
+            </div>
+
+            <!-- Div 3: Room Booking Form -->
+            <form id="booking-form" action="" method="POST">
+
+                {% csrf_token %}
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <label for="id_check_in">Check In : </label>
+                    <input type="datetime-local" id="id_check_in" name="check_in">
+                </div>
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <label for="id_check_out">Check Out : </label>
+                    <input type="datetime-local" id="id_check_out" name="check_out">
+                </div>
+
+                <!-- Input Div -->
+                <div class="input-div">
+                    <button type="submit">Rezerwuj pokój</button>
+                </div>
+
+            </form>
+
+        </div> <!-- END Room Div -->
+
+    </div> <!-- END Main Content Div -->
+
+</body>
+
+</html>
