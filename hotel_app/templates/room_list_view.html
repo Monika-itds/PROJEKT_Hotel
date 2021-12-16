@@ -6,15 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Marzenie</title>
-    <!-- Main StyleSheet -->
-    <link rel="stylesheet" href="{% static 'hotel_app/css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'hotel_app/css/room_list_view.css' %}">
 </head>
 
 <body>
-    <!-- Brand -->
     <h1 id="brand">Hotel Marzenie</h1>
 
-    <!-- Main Content -->
     <div class="content">
         {% for room_category, room_url in room_list %}
         <div class="room">
@@ -22,7 +19,7 @@
                 <img
                     src="https://cf.bstatic.com/xdata/images/hotel/max300/205409819.jpg?k=ae01463de46549b09cac31cff86ae3e9cda4d1e950900c8cb1aac474769959e7&o=&hp=1">
 
-                <h2>{{room_category}}</h2>
+                <h2>Pokój {{room_category}}</h2>
                 <p>Przestronny, komfortowy pokój, urządzony w nowoczesnym stylu, stonowanej kolorystyce, z dbałością o najnowsze trendy.</p>
             </a>
         </div>

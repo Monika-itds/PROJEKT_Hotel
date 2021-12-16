@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informacje o pokoju</title>
+    <title>Room Detail</title>
     <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'hotel_app/css/room_detail_view.css' %}">
 
@@ -14,10 +14,9 @@
 <body>
 
     <div class="content">
-
         <div class="image">
             <img
-                src="https://i.pinimg.com/originals/3c/97/e2/3c97e2089fb9f6e7f9e0e04b9c0eeefc.jpg">
+                src="https://ttgmice.2017.ttgasia.com/wp-content/uploads/sites/3/2018/10/Junior-Suite-3.jpg">
         </div>
 
         <div class="room">
@@ -25,7 +24,6 @@
             <div class="home">
                 <a href="{% url 'hotel_app:RoomListView' %}"><i class="fas fa-arrow-alt-circle-left">Powrót</i></a>
             </div>
-
             <div class="room-info">
                 <h1>Pokój {{room_category}}</h1>
                 <p>Przestronny pokój z wygodnymi łóżkami, telewizorem, nowoczesną łazienką oraz balkonem.
@@ -37,19 +35,11 @@
             <form id="booking-form" action="" method="POST">
 
                 {% csrf_token %}
-
+                <h2>Jesteś pewien, że chcesz anulować rezerwację?</h2>
+                <br><h2>Szczegóły:</h2><h3>{{booking.room.number}}{{booking.get_room_category}} {{booking}}</h3></br>
+                <!-- Input Div -->
                 <div class="input-div">
-                    <label for="id_check_in">Check In : </label>
-                    <input type="datetime-local" id="id_check_in" name="check_in">
-                </div>
-
-                <div class="input-div">
-                    <label for="id_check_out">Check Out : </label>
-                    <input type="datetime-local" id="id_check_out" name="check_out">
-                </div>
-
-                <div class="input-div">
-                    <button type="submit">Rezerwuj pokój</button>
+                    <button type="submit">Anuluj rezerwację</button>
                 </div>
 
             </form>

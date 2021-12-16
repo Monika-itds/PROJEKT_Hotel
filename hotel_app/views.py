@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
-from django.views.generic import ListView, FormView, View
-from django.urls import reverse
+from django.views.generic import ListView, FormView, View, DeleteView
+from django.urls import reverse, reverse_lazy
 from .models import Room, Booking
 from .forms import AvailabilityForm
 from hotel_app.booking_functions.availability import check_availability
@@ -24,8 +24,10 @@ def RoomListView(request):
     return render(request, 'room_list_view.html', context)
 
 
-class BookingList(ListView):
+class BookingListView(ListView):
     model = Booking
+    template_name = "booking_list_view.html"
+
     def get_queryset(self, *args, **kwargs):
         if self.request.user.is_staff:
             booking_list = Booking.objects.all()
@@ -60,45 +62,27 @@ class RoomDetailView(View):
         if form.is_valid():
             data = form.cleaned_data
 
-        available_rooms = []
-        for room in room_list:
-            if check_availability(room, data['check_in'], data['check_out']):
-                available_rooms.append(room)
+            available_rooms = []
+            for room in room_list:
+                if check_availability(room, data['check_in'], data['check_out']):
+                    available_rooms.append(room)
 
-        if len(available_rooms) > 0:
-            room = available_rooms[0]
-            booking = Booking.objects.create(
-                user=self.request.user,
-                room=room,
-                check_in=data['check_in'],
-                check_out=data['check_out']
-            )
-            booking.save()
-            return HttpResponse(booking)
+            if len(available_rooms) > 0:
+                room = available_rooms[0]
+                booking = Booking.objects.create(
+                    user=self.request.user,
+                    room=room,
+                    check_in=data['check_in'],
+                    check_out=data['check_out']
+                )
+                booking.save()
+                return HttpResponse(booking)
         else:
             return HttpResponse('Wszystkie pokoje z tej kategorii są już zajęte! Spróbuj wybrać inną.')
 
+class CancelBookingView(DeleteView):
+    model = Booking
+    template_name = 'booking_cancel_view.html'
+    success_url = reverse_lazy('hotel_app:BookingListView')
 
-class BookingView(FormView):
-    form_class = AvailabilityForm
-    template_name = 'availability_form.html'
 
-    def form_valid(self, form):
-        data = form.cleaned_data
-        room_list = Room.objects.filter(category=data['room_category'])
-        available_rooms = []
-        for room in room_list:
-            if check_availability(room, data['check_in'], data['check_out']):
-                available_rooms.append(room)
-
-        if len(available_rooms) > 0:
-            room = available_rooms[0]
-            booking = Booking.objects.create(
-                user=self.request.user,
-                room=room,
-                check_in=data['check_in'],
-                check_out=data['check_out']
-            )
-            booking.save()
-        else:
-            return HttpResponse('Wszystkie pokoje z tej kategorii są już zajęte! Spróbuj wybrać inną.')
