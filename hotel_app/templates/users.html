@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista użytkowników</title>
+    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h2>Lista użytkowników</h2>
+    <ul>
+        {% for u in users %}
+            <li>{{ u.username }} - {{ u.first_name }} {{ u.last_name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

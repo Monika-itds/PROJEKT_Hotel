@@ -1,9 +1,12 @@
 from django.shortcuts import render, HttpResponse
-from django.views.generic import ListView, FormView, View, DeleteView
+from django.views.generic import ListView, View, DeleteView
 from django.urls import reverse, reverse_lazy
 from .models import Room, Booking
-from .forms import AvailabilityForm
+from .forms import AvailabilityForm, LoginForm, UserRegistrationForm,
 from hotel_app.booking_functions.availability import check_availability
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+
 
 # Create your views here.
 
@@ -85,4 +88,50 @@ class CancelBookingView(DeleteView):
     template_name = 'booking_cancel_view.html'
     success_url = reverse_lazy('hotel_app:BookingListView')
 
+#--------
 
+class ListUsersView(View):
+    def get(self, request):
+        users = User.objects.all()
+        return render(request, 'hotel_app/users.html', {'users': users})
+
+
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'hotel_app/login.html', {'form': form})
+
+    def post(self, request):
+        form = LoginForm(request.POST)
+        form.is_valid()
+        user = authenticate(username=form.cleaned_data['login'],
+                            password=form.cleaned_data['password'])
+        if user:
+            login(request, user)
+            return reverse('/')
+        else:
+            return render(request, 'hotel_app/login.html', {'form': form, 'message': 'Błędny login lub hasło'})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return reverse('/')
+
+class UserRegistrationView(View):
+    def get(self, request):
+        form = UserRegistrationForm()
+        return render(request, 'hotel_app/user_registration_form.html', {'form': form})
+
+    def post(self, request):
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            login = form.cleaned_data['login']
+            password = form.cleaned_data['password']
+            name = form.cleaned_data['name']
+            surname = form.cleaned_data['surname']
+            email = form.cleaned_data['email']
+            User.objects.create_user(username=login, email=email, password=password, first_name=name, last_name=surname)
+            return HttpResponse('Stworzono użytkownika')
+        else:
+            return render(request, 'hotel_app/reset.html', {'form': form})
